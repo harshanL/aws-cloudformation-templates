@@ -10,6 +10,7 @@ readonly WUM_PASS=$6
 readonly JDK=$8
 readonly DB_ENGINE=$10
 readonly LIB_DIR=/home/${USERNAME}/lib
+readonly TMP_DIR=/tmp
 
 install_packages() {
     apt-get update -y
@@ -69,11 +70,11 @@ install_wum() {
 }
 
 get_mysql_jdbc_driver() {
-    wget -O ${LIB_DIR}/jdbc-connector.jar http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.44/mysql-connector-java-5.1.44.jar
+    wget -O ${TMP_DIR}/jdbc-connector.jar http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.44/mysql-connector-java-5.1.44.jar
 }
 
 get_postgre_jdbc_driver() {
-    wget -O ${LIB_DIR}/jdbc-connector.jar https://jdbc.postgresql.org/download/postgresql-42.1.4.jar
+    wget -O ${TMP_DIR}/jdbc-connector.jar https://jdbc.postgresql.org/download/postgresql-42.1.4.jar
 }
 
 main() {
