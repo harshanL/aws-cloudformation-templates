@@ -102,9 +102,9 @@ setup_postgres_databases() {
 
     echo ">> Creating tables..."
     psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -d $UM_DB -f dbscripts/postgresql/um-postgre.sql
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -d $UM_DB -f dbscripts/postgresql/identity-postgre.sql
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -d $UM_DB -f dbscripts/postgresql/identity-postgre.sql
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -d $UM_DB -f dbscripts/postgresql/identity-postgre.sql
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -d $IDENTITY_DB -f dbscripts/postgresql/identity-postgre.sql
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -d $GOV_REG_DB -f dbscripts/postgresql/identity-postgre.sql
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -d $BPS_DB -f dbscripts/postgresql/identity-postgre.sql
     echo ">> Tables created!"
 }
 
