@@ -15,11 +15,30 @@ install_packages() {
     apt install git -y
 }
 
-setup_java_home() {
-    source /home/ubuntu/.bashrc
-    export JAVA_HOME=${JDK}
-    source /home/ubuntu/.bashrc
-    echo $JAVA_HOME > /home/ubuntu/java.txt
+setup_java_env() {
+    if [ "$JDK" = "JDK7" ]]; then
+        JAVA_HOME=${JDK7}
+    elif [ "$JDK" = "JDK8" ]]; then
+        JAVA_HOME=${JDK8}
+    fi
+
+    JAVA_HOME_FOUND=$(grep -r "JAVA_HOME=" /etc/environment | wc -l  )
+    echo ">> Setting up JAVA_HOME ..."
+    if [ ${JAVA_HOME_FOUND} = 0 ]; then
+        echo ">> Adding JAVA_HOME entry."
+        echo JAVA_HOME=${JAVA_HOME} >> /etc/environment
+    else
+        echo ">> Updating JAVA_HOME entry."
+        sed -i "/JAVA_HOME=/c\JAVA_HOME=${JAVA_HOME}" /etc/environment
+    fi
+    source /etc/environment
+
+    echo ">> Setting java userPrefs ..."
+    mkdir -p /tmp/.java/.systemPrefs
+    mkdir /tmp/.java/.userPrefs
+    sudo -u ${USERNAME} chmod -R 755 /tmp/.java
+    echo "export JAVA_OPTS='-Djava.util.prefs.systemRoot=/tmp/.java/ -Djava.util.prefs.userRoot=/tmp/.java/.userPrefs'" >> /etc/profile
+    source /etc/profile
 }
 
 install_wum() {
@@ -50,7 +69,7 @@ main() {
     mkdir -p ${LIB_DIR}
 
     install_packages
-    setup_java_home
+    setup_java_env
     install_wum
     get_mysql_jdbc_driver
 
