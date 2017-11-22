@@ -24,6 +24,8 @@ setup_java_env() {
     fi
 
     echo JDK_PARAM=${JDK} >> /home/ubuntu/java.txt
+    echo JDK7=${JDK7} >> /home/ubuntu/java.txt
+    echo JDK8=${JDK8} >> /home/ubuntu/java.txt
     echo JAVA_HOME=${JAVA_HOME} >> /home/ubuntu/java.txt
     
     JAVA_HOME_FOUND=$(grep -r "JAVA_HOME=" /etc/environment | wc -l  )
