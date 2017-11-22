@@ -82,7 +82,6 @@ main() {
 
     install_packages
     install_wum
-    install_java8
     get_mysql_jdbc_driver
 
     echo "Done!"
