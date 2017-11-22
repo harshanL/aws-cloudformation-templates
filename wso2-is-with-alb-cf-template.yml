@@ -342,14 +342,10 @@ Resources:
           !Sub |
             #!/bin/bash -xe
             cd /home/ubuntu/
-            source /home/ubuntu/.bashrc
-            export JAVA_HOME=$${JDK}
-            source /home/ubuntu/.bashrc
-            echo $JAVA_HOME > /home/ubuntu/java.txt
             git clone https://github.com/harshanL/aws-cloudformation-templates.git --depth 1
             chown -R ubuntu aws-cloudformation-templates
             cd aws-cloudformation-templates
-            bash ./setup-env.sh -user ubuntu -wumuser ${WUMUsername} -wumpassowrd ${WUMPassword}
+            bash ./setup-env.sh -user ubuntu -wumuser ${WUMUsername} -wumpassowrd ${WUMPassword} -jdk ${JDK}
             bash ./setup-is.sh -user ubuntu -rdshost ${WSO2EnvDBInstance.Endpoint.Address} -rdsport ${WSO2EnvDBInstance.Endpoint.Port} -rdsengine ${DBEngine} -lbhost ${WSO2EnvISApplicationLoadBalancer.DNSName}
       Tags:
         - Key: Name
