@@ -8,6 +8,7 @@ readonly USERNAME=$2
 readonly WUM_USER=$4
 readonly WUM_PASS=$6
 readonly JDK=$8
+readonly DB_ENGINE=$10
 readonly LIB_DIR=/home/${USERNAME}/lib
 
 install_packages() {
@@ -62,7 +63,11 @@ install_wum() {
 }
 
 get_mysql_jdbc_driver() {
-    wget -P ${LIB_DIR} http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.44/mysql-connector-java-5.1.44.jar
+    wget -O ${LIB_DIR}/jdbc-connector.jar http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.44/mysql-connector-java-5.1.44.jar
+}
+
+get_postgre_jdbc_driver() {
+    wget -O ${LIB_DIR}/jdbc-connector.jar https://jdbc.postgresql.org/download/postgresql-42.1.4.jar
 }
 
 main() {
@@ -72,7 +77,11 @@ main() {
     install_packages
     setup_java_env
     install_wum
-    get_mysql_jdbc_driver
+    if [ $DB_ENGINE = "postgres" ]; then
+        get_postgre_jdbc_driver
+    elif [ $DB_ENGINE = "mysql" ]; then
+        get_mysql_jdbc_driver
+    fi
 
     echo "Done!"
 }
