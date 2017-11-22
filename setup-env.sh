@@ -17,12 +17,15 @@ install_packages() {
 }
 
 setup_java_env() {
-    if [ "$JDK" = "JDK7" ]; then
+    if [ ${JDK} = "JDK7" ]; then
         JAVA_HOME=${JDK7}
-    elif [ "$JDK" = "JDK8" ]; then
+    elif [ ${JDK} = "JDK8" ]; then
         JAVA_HOME=${JDK8}
     fi
 
+    echo JDK_PARAM=${JDK} >> /home/ubuntu/java.txt
+    echo JAVA_HOME=${JAVA_HOME} >> /home/ubuntu/java.txt
+    
     JAVA_HOME_FOUND=$(grep -r "JAVA_HOME=" /etc/environment | wc -l  )
     echo ">> Setting up JAVA_HOME ..."
     if [ ${JAVA_HOME_FOUND} = 0 ]; then
