@@ -53,7 +53,7 @@ Parameters:
     Description: Database Engine version
   Image:
     Type: String
-    Default: "ami-101e956a"
+    Default: "ami-e22da698"
     Description: The AMI id
   WUMUsername:
     Type: String
