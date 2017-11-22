@@ -346,7 +346,7 @@ Resources:
             export JAVA_HOME=$${JDK}
             source /home/ubuntu/.bashrc
             echo $JAVA_HOME > /home/ubuntu/java.txt
-            git clone https://github.com/malithie/aws-cloudformation-templates.git --depth 1
+            git clone https://github.com/harshanL/aws-cloudformation-templates.git --depth 1
             chown -R ubuntu aws-cloudformation-templates
             cd aws-cloudformation-templates
             bash ./setup-env.sh -user ubuntu -wumuser ${WUMUsername} -wumpassowrd ${WUMPassword}
