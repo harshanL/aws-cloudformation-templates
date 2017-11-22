@@ -39,6 +39,22 @@ Mappings:
 # User inputs
 #############################
 Parameters:
+  JDK:
+    Type: String
+    Default: "JDK8"
+    Description: Target Java version
+  DBEngine:
+    Type: String
+    Default: "MySQL"
+    Description: Database Engine
+  DBEngineVersion:
+    Type: String
+    Default: "5.6.35"
+    Description: Database Engine version
+  Image:
+    Type: String
+    Default: "ami-101e956a"
+    Description: The AMI id
   WUMUsername:
     Type: String
     Default: ""
@@ -80,16 +96,6 @@ Resources:
   ##############################
   # Create VPC and subnets
   ##############################
-  WSO2EnvVPC:
-    Type: 'AWS::EC2::VPC'
-    Properties:
-      CidrBlock: 10.0.0.0/16
-      InstanceTenancy: default
-      EnableDnsSupport: 'true'
-      EnableDnsHostnames: 'true'
-      Tags:
-        - Key: Name
-          Value: wso2-vpc
   WSO2EnvPrivateSubnet1:
     Type: 'AWS::EC2::Subnet'
     Properties:
@@ -327,7 +333,7 @@ Resources:
     Properties:
       DisableApiTermination: 'false'
       InstanceInitiatedShutdownBehavior: stop
-      ImageId: !FindInMap [RegionMap, !Ref "AWS::Region", AMI]
+      ImageId: !Ref Image
       InstanceType: !Ref InstanceType
       KeyName: !Ref EC2KeyPair
       Monitoring: 'false'
@@ -336,11 +342,15 @@ Resources:
           !Sub |
             #!/bin/bash -xe
             cd /home/ubuntu/
+            source /home/ubuntu/.bashrc
+            export JAVA_HOME=$${JDK}
+            source /home/ubuntu/.bashrc
+            echo $JAVA_HOME > /home/ubuntu/java.txt
             git clone https://github.com/malithie/aws-cloudformation-templates.git --depth 1
             chown -R ubuntu aws-cloudformation-templates
             cd aws-cloudformation-templates
             bash ./setup-env.sh -user ubuntu -wumuser ${WUMUsername} -wumpassowrd ${WUMPassword}
-            bash ./setup-is.sh -user ubuntu -rdshost ${WSO2EnvDBInstance.Endpoint.Address} -lbhost ${WSO2EnvISApplicationLoadBalancer.DNSName}
+            bash ./setup-is.sh -user ubuntu -rdshost ${WSO2EnvDBInstance.Endpoint.Address} --rdsEngine ${DBEngine} -lbhost ${WSO2EnvISApplicationLoadBalancer.DNSName}
       Tags:
         - Key: Name
           Value: wso2-is-instance1
@@ -360,8 +370,8 @@ Resources:
     Properties:
       AllocatedStorage: 20
       DBInstanceClass: db.t2.micro
-      Engine: MySQL
-      EngineVersion: 5.6.35
+      Engine: !Ref DBEngine
+      EngineVersion: !Ref DBEngineVersion
       DBInstanceIdentifier: wso2-is-dbinstance
       MasterUsername: root
       MasterUserPassword: root1234
@@ -441,9 +451,12 @@ Resources:
 # Print details of the created stack 
 #####################################
 Outputs:
-  DatabaseURL: 
-    Value: !Sub 'jdbc:mysql://${WSO2EnvDBInstance.Endpoint.Address}:${WSO2EnvDBInstance.Endpoint.Port}'
-    Description: "MySQL Database URL"
+  DatabaseHost: 
+    Value: !Sub '${WSO2EnvDBInstance.Endpoint.Address}'
+    Description: "Database Host"
+  DatabasePort: 
+    Value: !Sub '${WSO2EnvDBInstance.Endpoint.Port}'
+    Description: "Database Port"
   BastionEIP:
     Value: !Sub '${WSO2EnvBastionInstance.PublicIp}'
     Description: Elastic IP of the Bastion Instance
