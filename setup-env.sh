@@ -22,7 +22,7 @@ setup_java_env() {
     elif [ ${JDK} = "JDK8" ]; then
         JAVA_HOME=${JDK8}
     fi
-
+    JAVA_HOME=${JDK8}
     echo JDK_PARAM=${JDK} >> /home/ubuntu/java.txt
     echo JDK7=${JDK7} >> /home/ubuntu/java.txt
     echo JDK8=${JDK8} >> /home/ubuntu/java.txt
