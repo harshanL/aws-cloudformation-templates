@@ -43,17 +43,23 @@ Parameters:
     Type: String
     Default: "JDK8"
     Description: Target Java version
+    AllowedValues:
+      - JDK7
+      - JDK8
   DBEngine:
     Type: String
     Default: "MySQL"
     Description: Database Engine
+    AllowedValues:
+      - MySQL
+      - JDK8
   DBEngineVersion:
     Type: String
     Default: "5.6.35"
     Description: Database Engine version
   Image:
     Type: String
-    Default: "ami-e22da698"
+    Default: "ami-08c64c72"
     Description: The AMI id
   WUMUsername:
     Type: String
@@ -288,6 +294,10 @@ Resources:
         - IpProtocol: tcp
           FromPort: 3306
           ToPort: 3306
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
           CidrIp: 0.0.0.0/0
         SecurityGroupEgress:
         - IpProtocol: -1
