@@ -82,7 +82,7 @@ Parameters:
   InstanceType:
     Description: EC2 instance type [t2.micro is the free tier]
     Type: String
-    Default: t2.micro
+    Default: m3.medium
     AllowedValues:
       - t2.nano
       - t1.micro
