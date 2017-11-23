@@ -33,7 +33,7 @@
                 <configuration>
                     <url>jdbc:#_RDS_TYPE_#://#_RDS_HOSTNAME_#:#_RDS_PORT_#/#_BPS_DB_#</url>
                     <username>#_BPS_USER_#</username>
-                    <password>#_BPS_USER_#</password>
+                    <password>#_BPS_USER_PWD_#</password>
                     <driverClassName>#_DRIVER_CLASS_#</driverClassName>
                     <maxActive>100</maxActive>
                     <maxWait>10000</maxWait>

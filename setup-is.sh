@@ -39,10 +39,15 @@ readonly METRICS_DB="wso2db"
 
 # database users
 readonly UM_USER=$MASTER_DB_USERNAME
+readonly UM_USER_PWD=$MASTER_DB_PASSWORD
 readonly IDENTITY_USER=$MASTER_DB_USERNAME
+readonly IDENTITY_USER_PWD=$MASTER_DB_PASSWORD
 readonly GOV_REG_USER=$MASTER_DB_USERNAME
+readonly GOV_REG_USER_PWD=$MASTER_DB_PASSWORD
 readonly BPS_USER=$MASTER_DB_USERNAME
-readonly METRICS_DB_USER=$MASTER_DB_USERNAME
+readonly BPS_USER_PWD=$MASTER_DB_PASSWORD
+readonly METRICS_USER=$MASTER_DB_USERNAME
+readonly METRICS_USER_PWD=$MASTER_DB_PASSWORD
 
 setup_wum_updated_pack() {
 
@@ -59,28 +64,28 @@ setup_mysql_databases() {
     echo "MySQL setting up" >> /home/ubuntu/java.txt
     echo ">> Creating databases..."
     mysql -h $DB_HOST -P $DB_PORT -u $MYSQL_USERNAME -p$MYSQL_PASSWORD -e "DROP DATABASE IF EXISTS $UM_DB; DROP DATABASE IF
-    EXISTS $IDENTITY_DB; DROP DATABASE IF EXISTS $GOV_REG_DB; DROP DATABASE IF EXISTS $BPS_DB; CREATE DATABASE
-    $UM_DB; CREATE DATABASE $IDENTITY_DB; CREATE DATABASE $GOV_REG_DB; CREATE DATABASE $BPS_DB;"
+    EXISTS $IDENTITY_DB; DROP DATABASE IF EXISTS $GOV_REG_DB; DROP DATABASE IF EXISTS $BPS_DB; DROP DATABASE IF EXISTS $METRICS_DB;
+     CREATE DATABASE $UM_DB; CREATE DATABASE $IDENTITY_DB; CREATE DATABASE $GOV_REG_DB; CREATE DATABASE $BPS_DB; CREATE DATABASE $METRICS_DB;"
     echo ">> Databases created!"
 
     echo ">> Creating users..."
     mysql -h $DB_HOST -P $DB_PORT -u $MYSQL_USERNAME -p$MYSQL_PASSWORD -e "CREATE USER '$UM_USER'@'%' IDENTIFIED BY
-    '$MYSQL_PASSWORD'; CREATE USER '$IDENTITY_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD'; CREATE USER '$GOV_REG_USER'@'%'
-    IDENTIFIED BY '$MYSQL_PASSWORD'; CREATE USER '$BPS_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD'; 
-    CREATE USER '$METRICS_DB_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+    '$UM_USER_PWD'; CREATE USER '$IDENTITY_USER'@'%' IDENTIFIED BY '$IDENTITY_USER_PWD'; CREATE USER '$GOV_REG_USER'@'%'
+    IDENTIFIED BY '$GOV_REG_USER_PWD'; CREATE USER '$BPS_USER'@'%' IDENTIFIED BY '$BPS_USER_PWD';
+    CREATE USER '$METRICS_USER'@'%' IDENTIFIED BY '$METRICS_USER_PWD';"
     echo ">> Users created!"
 
     echo -e ">> Grant access for users..."
     mysql -h $DB_HOST -P $DB_PORT -u $MYSQL_USERNAME -p$MYSQL_PASSWORD -e "GRANT ALL PRIVILEGES ON $UM_DB.* TO '$UM_USER'@'%';
     GRANT ALL PRIVILEGES ON $IDENTITY_DB.* TO '$IDENTITY_USER'@'%'; GRANT ALL PRIVILEGES ON $GOV_REG_DB.* TO
     '$GOV_REG_USER'@'%'; GRANT ALL PRIVILEGES ON $BPS_DB.* TO '$BPS_USER'@'%'; 
-    GRANT ALL PRIVILEGES ON $METRICS_DB.* TO '$METRICS_DB_USER'@'%';"
+    GRANT ALL PRIVILEGES ON $METRICS_DB.* TO '$METRICS_USER'@'%';"
     echo ">> Access granted!"
 
     echo ">> Creating tables..."
     if [ $DB_VERSION -ge  5.7.0]; then
     	mysql -h $DB_HOST -P $DB_PORT -u $MYSQL_USERNAME -p$MYSQL_PASSWORD -e "USE $UM_DB; SOURCE $DB_SCRIPT_HOME/mysql5.7.sql;
-	USE $GOV_REG_DB; SOURCE $DB_SCRIPT_HOME/mysql5.7.sql; USE $IDENTITY_DB; SOURCE $DB_SCRIPT_HOME/identity/mysql-5.7.sql; 
+	USE $GOV_REG_DB; SOURCE $DB_SCRIPT_HOME/mysql5.7.sql; USE $IDENTITY_DB; SOURCE $DB_SCRIPT_HOME/identity/mysql-5.7.sql;
 	USE $BPS_DB; SOURCE $DB_SCRIPT_HOME/bps/bpel/create/mysql.sql; USE $METRICS_DB; 
 	SOURCE $DB_SCRIPT_HOME/metrics/mysql.sql;"
     else
@@ -97,11 +102,11 @@ setup_postgres_databases() {
     export PGPASSWORD=$POSTGRES_PASSWORD
 
     echo ">> Creating users..."
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $UM_USER WITH LOGIN PASSWORD '$POSTGRES_PASSWORD'"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $IDENTITY_USER WITH LOGIN PASSWORD '$POSTGRES_PASSWORD'"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $GOV_REG_USER WITH LOGIN PASSWORD '$POSTGRES_PASSWORD'"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $BPS_USER WITH LOGIN PASSWORD '$POSTGRES_PASSWORD'"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $METRICS_DB_USER WITH LOGIN PASSWORD '$POSTGRES_PASSWORD'"
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $UM_USER WITH LOGIN PASSWORD '$UM_USER_PWD'"
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $IDENTITY_USER WITH LOGIN PASSWORD '$IDENTITY_USER_PWD'"
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $GOV_REG_USER WITH LOGIN PASSWORD '$GOV_REG_USER_PWD'"
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $BPS_USER WITH LOGIN PASSWORD '$BPS_USER_PWD'"
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $METRICS_USER WITH LOGIN PASSWORD '$METRICS_USER_PWD'"
     echo ">> Users created!"
 
     echo -e ">> Grant access for users..."
@@ -109,7 +114,7 @@ setup_postgres_databases() {
     psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE $IDENTITY_DB TO $IDENTITY_USER"
     psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE $GOV_REG_DB TO $GOV_REG_USER"
     psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE $BPS_DB TO $UM_USER"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE $METRICS_DB TO $METRICS_DB_USER"
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE $METRICS_DB TO $METRICS_USER"
     echo ">> Access granted!"
 
     echo ">> Creating tables..."
@@ -145,12 +150,16 @@ configure_product() {
     find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_DRIVER_CLASS_#/'$DRIVER_CLASS'/g'
     find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_UM_DB_#/'$UM_DB'/g'
     find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_UM_USER_#/'$UM_USER'/g'
+    find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_UM_USER_PWD_#/'$UM_USER_PWD'/g'
     find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_GOV_REG_DB_#/'$GOV_REG_DB'/g'
     find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_GOV_REG_USER_#/'$GOV_REG_USER'/g'
+    find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_GOV_REG_USER_PWD_#/'$GOV_REG_USER_PWD'/g'
     find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_IDENTITY_DB_#/'$IDENTITY_DB'/g'
     find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_IDENTITY_USER_#/'$IDENTITY_USER'/g'
+    find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_IDENTITY_USER_PWD_#/'$IDENTITY_USER_PWD'/g'
     find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_BPS_DB_#/'$BPS_DB'/g'
     find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_BPS_USER_#/'$BPS_USER'/g'
+    find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_BPS_USER_PWD_#/'$BPS_USER_PWD'/g'
     echo "Done!"
 }
 
