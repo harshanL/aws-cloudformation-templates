@@ -8,7 +8,7 @@ readonly USERNAME=$2
 readonly WUM_USER=$4
 readonly WUM_PASS=$6
 readonly JDK=$8
-readonly DB_ENGINE=$10
+readonly DB_ENGINE=$(echo "$10" | awk '{print tolower($0)}')
 readonly LIB_DIR=/home/${USERNAME}/lib
 readonly TMP_DIR=/tmp
 
