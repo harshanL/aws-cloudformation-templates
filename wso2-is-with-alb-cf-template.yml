@@ -39,6 +39,8 @@ Mappings:
 # User inputs
 #############################
 Parameters:
+  WSO2EnvVPC:
+    Type: String
   JDK:
     Type: String
     Default: "JDK8"
