@@ -143,11 +143,11 @@ configure_product() {
 }
 
 get_driver_class() {
-	DRIVER_CLASS=""
-	if [ $DB_ENGINE = "postgres" ]; then
+    DRIVER_CLASS=""
+    if [ $DB_ENGINE = "postgres" ]; then
         DRIVER_CLASS="org.postgresql.Driver"
     elif [ $DB_ENGINE = "mysql" ]; then
-		DRIVER_CLASS="com.mysql.jdbc.Driver"
+	DRIVER_CLASS="com.mysql.jdbc.Driver"
     elif [ $DB_ENGINE = "oracle-se" ]; then
         DRIVER_CLASS="com.mysql.jdbc.Driver"
     elif [ $DB_ENGINE = "sqlserver-ex" ]; then
@@ -159,11 +159,11 @@ get_driver_class() {
 }
 
 get_jdbc_url_prefix() {
-	URL=""
-	if [ $DB_ENGINE = "postgres" ]; then
+    URL=""
+    if [ $DB_ENGINE = "postgres" ]; then
         URL="postgresql"
     elif [ $DB_ENGINE = "mysql" ]; then
-		URL="mysql"
+	URL="mysql"
     elif [ $DB_ENGINE = "oracle-se" ]; then
         URL="oracle:thin"
     elif [ $DB_ENGINE = "sqlserver-ex" ]; then
