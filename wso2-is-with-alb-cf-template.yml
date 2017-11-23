@@ -391,8 +391,9 @@ Resources:
       Engine: !Ref DBEngine
       EngineVersion: !Ref DBEngineVersion
       DBInstanceIdentifier: wso2-is-dbinstance
-      MasterUsername: root
-      MasterUserPassword: root1234
+      DBName: wso2-db
+      MasterUsername: wso2
+      MasterUserPassword: wso21234
       AutoMinorVersionUpgrade: false
       BackupRetentionPeriod: 0
       DBSubnetGroupName: !Ref WSO2EnvDBSubnetGroup
