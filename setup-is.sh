@@ -124,7 +124,7 @@ copy_config_files() {
 
 configure_product() {
     DB_TYPE=$(get_jdbc_url_prefix)
-	DRIVER_CLASS=$(get_driver_class)
+    DRIVER_CLASS=$(get_driver_class)
     echo ">> Configuring product "
     find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_IS_LB_HOSTNAME_#/'$IS_HOST_NAME'/g'
     find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_RDS_HOSTNAME_#/'$DB_HOST'/g'
