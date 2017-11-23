@@ -7,8 +7,8 @@ readonly USERNAME=$2
 readonly DB_HOST=$4
 readonly DB_PORT=$6
 readonly DB_ENGINE=$(echo "$8" | awk '{print tolower($0)}')
-readonly DB_VERSION=$12
-readonly IS_HOST_NAME=$10
+readonly DB_VERSION=$10
+readonly IS_HOST_NAME=$12
 
 readonly PRODUCT_NAME="wso2is"
 readonly PRODUCT_VERSION="5.3.0"
