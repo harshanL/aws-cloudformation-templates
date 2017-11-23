@@ -12,8 +12,7 @@ readonly C=$5
 readonly WUM_PASS=$6
 readonly D=$7
 readonly JDK=$8
-readonly E=$9
-readonly DB_ENGINE=$10
+readonly DB_ENGINE=$9
 readonly LIB_DIR=/home/${USERNAME}/lib
 readonly TMP_DIR=/tmp
 
@@ -93,8 +92,7 @@ echo_params() {
     echo 6=${WUM_PASS} >> /home/ubuntu/java.txt
     echo 7=${D} >> /home/ubuntu/java.txt
     echo 8=${JDK} >> /home/ubuntu/java.txt
-    echo 9=${E} >> /home/ubuntu/java.txt
-    echo 10=${DB_ENGINE} >> /home/ubuntu/java.txt
+    echo 9=${DB_ENGINE} >> /home/ubuntu/java.txt
 }
 
 main() {
