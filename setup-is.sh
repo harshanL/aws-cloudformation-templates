@@ -112,7 +112,7 @@ setup_postgres_databases() {
 copy_libs() {
 
     echo ">> Copying $DB_ENGINE jdbc driver "
-    cp -v $(find /tmp/ -iname "jdbc-connector" | head -n 1 ) ${PRODUCT_HOME}/repository/components/lib
+    cp /tmp/jdbc-connector.jar ${PRODUCT_HOME}/repository/components/lib
 }
 
 copy_config_files() {
