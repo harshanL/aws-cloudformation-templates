@@ -27,10 +27,10 @@ readonly POSTGRES_USERNAME="wso2"
 readonly POSTGRES_PASSWORD="wso21234"
 
 # databases
-readonly UM_DB="wso2-db"
-readonly IDENTITY_DB="wso2-db"
-readonly GOV_REG_DB="wso2-db"
-readonly BPS_DB="wso2-db"
+readonly UM_DB="wso2db"
+readonly IDENTITY_DB="wso2db"
+readonly GOV_REG_DB="wso2db"
+readonly BPS_DB="wso2db"
 
 # database users
 readonly UM_USER="wso2"
