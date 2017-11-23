@@ -123,7 +123,8 @@ copy_config_files() {
 }
 
 configure_product() {
-
+    DB_TYPE=$(get_jdbc_url_prefix)
+	DRIVER_CLASS=$(get_driver_class)
     echo ">> Configuring product "
     find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_IS_LB_HOSTNAME_#/'$IS_HOST_NAME'/g'
     find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_RDS_HOSTNAME_#/'$DB_HOST'/g'
@@ -139,6 +140,38 @@ configure_product() {
     find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_BPS_DB_#/'$BPS_DB'/g'
     find ${PRODUCT_HOME}/ -type f \( -iname "*.properties" -o -iname "*.xml" \) -print0 | xargs -0 sed -i 's/#_BPS_USER_#/'$BPS_USER'/g'
     echo "Done!"
+}
+
+get_driver_class() {
+	DRIVER_CLASS=""
+	if [ $DB_ENGINE = "postgres" ]; then
+        DRIVER_CLASS="org.postgresql.Driver"
+    elif [ $DB_ENGINE = "mysql" ]; then
+		DRIVER_CLASS="com.mysql.jdbc.Driver"
+    elif [ $DB_ENGINE = "oracle-se" ]; then
+        DRIVER_CLASS="com.mysql.jdbc.Driver"
+    elif [ $DB_ENGINE = "sqlserver-ex" ]; then
+        DRIVER_CLASS="com.mysql.jdbc.Driver"
+    elif [ $DB_ENGINE = "mariadb" ]; then
+        DRIVER_CLASS="com.mysql.jdbc.Driver"
+    fi
+    echo $DRIVER_CLASS
+}
+
+get_jdbc_url_prefix() {
+	URL=""
+	if [ $DB_ENGINE = "postgres" ]; then
+        URL="postgresql"
+    elif [ $DB_ENGINE = "mysql" ]; then
+		URL="mysql"
+    elif [ $DB_ENGINE = "oracle-se" ]; then
+        URL="oracle:thin"
+    elif [ $DB_ENGINE = "sqlserver-ex" ]; then
+        URL="sqlserver"
+    elif [ $DB_ENGINE = "mariadb" ]; then
+        URL="mariadb"
+    fi
+    echo $URL
 }
 
 start_product() {
