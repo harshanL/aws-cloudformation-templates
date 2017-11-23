@@ -31,12 +31,14 @@ readonly UM_DB="wso2db"
 readonly IDENTITY_DB="wso2db"
 readonly GOV_REG_DB="wso2db"
 readonly BPS_DB="wso2db"
+readonly METRICS_DB="wso2db"
 
 # database users
 readonly UM_USER="wso2"
 readonly IDENTITY_USER="wso2"
 readonly GOV_REG_USER="wso2"
 readonly BPS_USER="wso2"
+readonly METRICS_DB_USER="wso2"
 
 setup_wum_updated_pack() {
 
@@ -60,23 +62,27 @@ setup_mysql_databases() {
     echo ">> Creating users..."
     mysql -h $DB_HOST -P $DB_PORT -u $MYSQL_USERNAME -p$MYSQL_PASSWORD -e "CREATE USER '$UM_USER'@'%' IDENTIFIED BY
     '$UM_USER'; CREATE USER '$IDENTITY_USER'@'%' IDENTIFIED BY '$IDENTITY_USER'; CREATE USER '$GOV_REG_USER'@'%'
-    IDENTIFIED BY '$GOV_REG_USER'; CREATE USER '$BPS_USER'@'%' IDENTIFIED BY '$BPS_USER';"
+    IDENTIFIED BY '$GOV_REG_USER'; CREATE USER '$BPS_USER'@'%' IDENTIFIED BY '$BPS_USER'; 
+    CREATE USER '$METRICS_DB_USER'@'%' IDENTIFIED BY '$METRICS_DB_USER';"
     echo ">> Users created!"
 
     echo -e ">> Grant access for users..."
     mysql -h $DB_HOST -P $DB_PORT -u $MYSQL_USERNAME -p$MYSQL_PASSWORD -e "GRANT ALL PRIVILEGES ON $UM_DB.* TO '$UM_USER'@'%';
     GRANT ALL PRIVILEGES ON $IDENTITY_DB.* TO '$IDENTITY_USER'@'%'; GRANT ALL PRIVILEGES ON $GOV_REG_DB.* TO
-    '$GOV_REG_USER'@'%'; GRANT ALL PRIVILEGES ON $BPS_DB.* TO '$BPS_USER'@'%';"
+    '$GOV_REG_USER'@'%'; GRANT ALL PRIVILEGES ON $BPS_DB.* TO '$BPS_USER'@'%'; 
+    GRANT ALL PRIVILEGES ON $METRICS_DB.* TO '$METRICS_DB_USER'@'%';"
     echo ">> Access granted!"
 
     echo ">> Creating tables..."
     if [ $DB_VERSION -ge  5.7.0]; then
     	mysql -h $DB_HOST -P $DB_PORT -u $MYSQL_USERNAME -p$MYSQL_PASSWORD -e "USE $UM_DB; SOURCE $DB_SCRIPT_HOME/mysql5.7.sql;
-	SOURCE $DB_SCRIPT_HOME/identity/mysql-5.7.sql; SOURCE $DB_SCRIPT_HOME/bps/bpel/create/mysql.sql; 
+	USE $GOV_REG_DB; SOURCE $DB_SCRIPT_HOME/mysql5.7.sql; USE $IDENTITY_DB; SOURCE $DB_SCRIPT_HOME/identity/mysql-5.7.sql; 
+	USE $BPS_DB; SOURCE $DB_SCRIPT_HOME/bps/bpel/create/mysql.sql; USE $METRICS_DB; 
 	SOURCE $DB_SCRIPT_HOME/metrics/mysql.sql;"
     else
     	mysql -h $DB_HOST -P $DB_PORT -u $MYSQL_USERNAME -p$MYSQL_PASSWORD -e "USE $UM_DB; SOURCE $DB_SCRIPT_HOME/mysql.sql;
-	SOURCE $DB_SCRIPT_HOME/identity/mysql.sql; SOURCE $DB_SCRIPT_HOME/bps/bpel/create/mysql.sql; 
+	USE $GOV_REG_DB; SOURCE $DB_SCRIPT_HOME/mysql.sql; USE $IDENTITY_DB; SOURCE $DB_SCRIPT_HOME/identity/mysql.sql; 
+	USE $BPS_DB; SOURCE $DB_SCRIPT_HOME/bps/bpel/create/mysql.sql; USE $METRICS_DB; 
 	SOURCE $DB_SCRIPT_HOME/metrics/mysql.sql;"
     fi
     echo ">> Tables created!"
@@ -85,35 +91,29 @@ setup_mysql_databases() {
 setup_postgres_databases() {
     echo "Postgres setting up" >> /home/ubuntu/java.txt
     export PGPASSWORD=$POSTGRES_PASSWORD
-    echo ">> Creating databases..."
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "DROP DATABASE IF EXISTS WSO2_UM_DB;"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "DROP DATABASE IF EXISTS WSO2_IDENTITY_DB;"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "DROP DATABASE IF EXISTS WSO2_GOV_REG_DB;"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "DROP DATABASE IF EXISTS WSO2_BPS_DB;"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE DATABASE WSO2_UM_DB;"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE DATABASE WSO2_IDENTITY_DB;"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE DATABASE WSO2_GOV_REG_DB;"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE DATABASE WSO2_BPS_DB;"
 
     echo ">> Creating users..."
     psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $UM_USER WITH LOGIN PASSWORD '$UM_USER'"
     psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $IDENTITY_USER WITH LOGIN PASSWORD '$IDENTITY_USER'"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $GOV_REG_USERWITH LOGIN PASSWORD '$GOV_REG_USER'"
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $GOV_REG_USER WITH LOGIN PASSWORD '$GOV_REG_USER'"
     psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $BPS_USER WITH LOGIN PASSWORD '$BPS_USER'"
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $METRICS_DB_USER WITH LOGIN PASSWORD '$METRICS_DB_USER'"
     echo ">> Users created!"
 
     echo -e ">> Grant access for users..."
     psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE $UM_DB TO $UM_USER"
     psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE $IDENTITY_DB TO $IDENTITY_USER"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE $GOV_REG_DB TO $UM_USER"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE $BPS_DB TO $BPS_USER"
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE $GOV_REG_DB TO $GOV_REG_USER"
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE $BPS_DB TO $UM_USER"
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "GRANT ALL PRIVILEGES ON DATABASE $METRICS_DB TO $METRICS_DB_USER"
     echo ">> Access granted!"
 
     echo ">> Creating tables..."
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -d $UM_DB -f dbscripts/postgresql/um-postgre.sql
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -d $IDENTITY_DB -f dbscripts/postgresql/identity-postgre.sql
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -d $GOV_REG_DB -f dbscripts/postgresql/identity-postgre.sql
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -d $BPS_DB -f dbscripts/postgresql/identity-postgre.sql
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -d $UM_DB -f $DB_SCRIPT_HOME/postgresql.sql
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -d $GOV_REG_DB -f $DB_SCRIPT_HOME/postgresql.sql
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -d $IDENTITY_DB -f $DB_SCRIPT_HOME/identity/postgresql.sql
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -d $BPS_DB -f $DB_SCRIPT_HOME/bps/bpel/create/postgresql.sql
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -d $METRICS_DB -f $DB_SCRIPT_HOME/metrics/postgresql.sql
     echo ">> Tables created!"
 }
 
