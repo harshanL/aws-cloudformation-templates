@@ -70,10 +70,12 @@ install_wum() {
 }
 
 get_mysql_jdbc_driver() {
+    echo MYSQL_DB_ENGINE=${DB_ENGINE} >> /home/ubuntu/java.txt
     wget -O ${TMP_DIR}/jdbc-connector.jar http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.44/mysql-connector-java-5.1.44.jar
 }
 
 get_postgre_jdbc_driver() {
+    echo POSTGRE_DB_ENGINE=${DB_ENGINE} >> /home/ubuntu/java.txt
     wget -O ${TMP_DIR}/jdbc-connector.jar https://jdbc.postgresql.org/download/postgresql-42.1.4.jar
 }
 
@@ -84,6 +86,7 @@ main() {
     install_packages
     setup_java_env
     install_wum
+    echo DB_ENGINE=${DB_ENGINE} >> /home/ubuntu/java.txt
     if [ $DB_ENGINE = "postgres" ]; then
         get_postgre_jdbc_driver
     elif [ $DB_ENGINE = "mysql" ]; then
