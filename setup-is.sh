@@ -140,6 +140,7 @@ configure_product() {
 start_product() {
     source /etc/environment
     echo ">> Starting WSO2 Identity Server ... "
+    echo DB_ENGINE=${DB_ENGINE} >> /home/ubuntu/java.txt
     sudo -u ${USERNAME} bash ${PRODUCT_HOME}/bin/wso2server.sh start
 }
 
