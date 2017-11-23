@@ -31,11 +31,11 @@ readonly POSTGRES_USERNAME=$MASTER_DB_USERNAME
 readonly POSTGRES_PASSWORD=$MASTER_DB_PASSWORD
 
 # databases
-readonly UM_DB="wso2db"
-readonly IDENTITY_DB="wso2db"
-readonly GOV_REG_DB="wso2db"
-readonly BPS_DB="wso2db"
-readonly METRICS_DB="wso2db"
+readonly UM_DB="WSO2_UM_DB"
+readonly IDENTITY_DB="WSO2_IDENTITY_DB"
+readonly GOV_REG_DB="WSO2_GOV_REG_DB"
+readonly BPS_DB="WSO2_BPS_DB"
+readonly METRICS_DB="WSO2_METRICS_DB"
 
 # database users
 readonly UM_USER=$MASTER_DB_USERNAME
