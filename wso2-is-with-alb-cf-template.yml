@@ -367,7 +367,7 @@ Resources:
             git clone https://github.com/harshanL/aws-cloudformation-templates.git --depth 1
             chown -R ubuntu aws-cloudformation-templates
             cd aws-cloudformation-templates
-            bash ./setup-env.sh -user ubuntu -wumuser ${WUMUsername} -wumpassowrd ${WUMPassword} -jdk ${JDK} -rdsengine ${DBEngine}
+            bash ./setup-env.sh -user ubuntu -wumuser ${WUMUsername} -wumpassowrd ${WUMPassword} -jdk ${JDK} ${DBEngine}
             bash ./setup-is.sh -user ubuntu -rdshost ${WSO2EnvDBInstance.Endpoint.Address} -rdsport ${WSO2EnvDBInstance.Endpoint.Port} -rdsengine ${DBEngine} -lbhost ${WSO2EnvISApplicationLoadBalancer.DNSName}
       Tags:
         - Key: Name
