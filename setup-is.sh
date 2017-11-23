@@ -20,11 +20,11 @@ readonly DB_SCRIPT_HOME="${PRODUCT_HOME}/dbscripts"
 
 # MYSQL connection details
 readonly MYSQL_USERNAME="wso2"
-readonly MYSQL_PASSWORD="wso21234"
+readonly MYSQL_PASSWORD="wso2"
 
 #PostgreSQL connection details
 readonly POSTGRES_USERNAME="wso2"
-readonly POSTGRES_PASSWORD="wso21234"
+readonly POSTGRES_PASSWORD="wso2"
 
 # databases
 readonly UM_DB="wso2db"
