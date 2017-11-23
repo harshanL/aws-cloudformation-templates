@@ -4,13 +4,9 @@ exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 set -o verbose
 
 # This script setup environment for WSO2 product deployment
-readonly A=$1
 readonly USERNAME=$2
-readonly B=$3
 readonly WUM_USER=$4
-readonly C=$5
 readonly WUM_PASS=$6
-readonly D=$7
 readonly JDK=$8
 readonly DB_ENGINE=$9
 readonly LIB_DIR=/home/${USERNAME}/lib
@@ -84,13 +80,8 @@ get_postgre_jdbc_driver() {
 }
 
 echo_params() {
-    echo 1=${A} >> /home/ubuntu/java.txt
     echo 2=${USERNAME} >> /home/ubuntu/java.txt
-    echo 3=${B} >> /home/ubuntu/java.txt
     echo 4=${WUM_USER} >> /home/ubuntu/java.txt
-    echo 5=${C} >> /home/ubuntu/java.txt
-    echo 6=${WUM_PASS} >> /home/ubuntu/java.txt
-    echo 7=${D} >> /home/ubuntu/java.txt
     echo 8=${JDK} >> /home/ubuntu/java.txt
     echo 9=${DB_ENGINE} >> /home/ubuntu/java.txt
 }
