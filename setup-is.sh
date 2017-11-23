@@ -7,6 +7,7 @@ readonly USERNAME=$2
 readonly DB_HOST=$4
 readonly DB_PORT=$6
 readonly DB_ENGINE=$(echo "$8" | awk '{print tolower($0)}')
+readonly DB_VERSION=$12
 readonly IS_HOST_NAME=$10
 
 readonly PRODUCT_NAME="wso2is"
@@ -15,26 +16,27 @@ readonly WUM_PRODUCT_NAME=${PRODUCT_NAME}-${PRODUCT_VERSION}
 readonly WUM_PRODUCT_DIR=/home/${USERNAME}/.wum-wso2/products/${PRODUCT_NAME}/${PRODUCT_VERSION}
 readonly INSTALLATION_DIR=/opt/wso2
 readonly PRODUCT_HOME="${INSTALLATION_DIR}/${PRODUCT_NAME}-${PRODUCT_VERSION}"
+readonly DB_SCRIPT_HOME="${PRODUCT_HOME}/dbscripts"
 
 # MYSQL connection details
-readonly MYSQL_USERNAME="root"
-readonly MYSQL_PASSWORD="root1234"
+readonly MYSQL_USERNAME="wso2"
+readonly MYSQL_PASSWORD="wso21234"
 
 #PostgreSQL connection details
-readonly POSTGRES_USERNAME="postgres"
-readonly POSTGRES_PASSWORD="postgres"
+readonly POSTGRES_USERNAME="wso2"
+readonly POSTGRES_PASSWORD="wso21234"
 
 # databases
-readonly UM_DB="WSO2_UM_DB"
-readonly IDENTITY_DB="WSO2_IDENTITY_DB"
-readonly GOV_REG_DB="WSO2_GOV_REG_DB"
-readonly BPS_DB="WSO2_BPS_DB"
+readonly UM_DB="wso2-db"
+readonly IDENTITY_DB="wso2-db"
+readonly GOV_REG_DB="wso2-db"
+readonly BPS_DB="wso2-db"
 
 # database users
-readonly UM_USER="wso2umuser"
-readonly IDENTITY_USER="wso2identityuser"
-readonly GOV_REG_USER="wso2registryuser"
-readonly BPS_USER="wso2bpsuser"
+readonly UM_USER="wso2"
+readonly IDENTITY_USER="wso2"
+readonly GOV_REG_USER="wso2"
+readonly BPS_USER="wso2"
 
 setup_wum_updated_pack() {
 
@@ -68,9 +70,15 @@ setup_mysql_databases() {
     echo ">> Access granted!"
 
     echo ">> Creating tables..."
-    mysql -h $DB_HOST -P $DB_PORT -u $MYSQL_USERNAME -p$MYSQL_PASSWORD -e "USE $UM_DB; SOURCE dbscripts/mysql/um-mysql.sql;
-    USE $IDENTITY_DB; SOURCE dbscripts/mysql/identity-mysql.sql; USE $GOV_REG_DB; SOURCE dbscripts/mysql/gov-registry-mysql.sql;
-    USE $BPS_DB; SOURCE dbscripts/mysql/bps-mysql.sql;"
+    if [ $DB_VERSION -ge  5.7.0]; then
+    	mysql -h $DB_HOST -P $DB_PORT -u $MYSQL_USERNAME -p$MYSQL_PASSWORD -e "USE $UM_DB; SOURCE $DB_SCRIPT_HOME/mysql5.7.sql;
+	SOURCE $DB_SCRIPT_HOME/identity/mysql-5.7.sql; SOURCE $DB_SCRIPT_HOME/bps/bpel/create/mysql.sql; 
+	SOURCE $DB_SCRIPT_HOME/metrics/mysql.sql;"
+    else
+    	mysql -h $DB_HOST -P $DB_PORT -u $MYSQL_USERNAME -p$MYSQL_PASSWORD -e "USE $UM_DB; SOURCE $DB_SCRIPT_HOME/mysql.sql;
+	SOURCE $DB_SCRIPT_HOME/identity/mysql.sql; SOURCE $DB_SCRIPT_HOME/bps/bpel/create/mysql.sql; 
+	SOURCE $DB_SCRIPT_HOME/metrics/mysql.sql;"
+    fi
     echo ">> Tables created!"
 }
 
