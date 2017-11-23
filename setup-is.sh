@@ -48,7 +48,7 @@ setup_wum_updated_pack() {
 }
 
 setup_mysql_databases() {
-
+    echo "MySQL setting up" >> /home/ubuntu/java.txt
     echo ">> Creating databases..."
     mysql -h $DB_HOST -P $DB_PORT -u $MYSQL_USERNAME -p$MYSQL_PASSWORD -e "DROP DATABASE IF EXISTS $UM_DB; DROP DATABASE IF
     EXISTS $IDENTITY_DB; DROP DATABASE IF EXISTS $GOV_REG_DB; DROP DATABASE IF EXISTS $BPS_DB; CREATE DATABASE
@@ -75,6 +75,7 @@ setup_mysql_databases() {
 }
 
 setup_postgres_databases() {
+    echo "Postgres setting up" >> /home/ubuntu/java.txt
     export PGPASSWORD=$POSTGRES_PASSWORD
     echo ">> Creating databases..."
     psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "DROP DATABASE IF EXISTS WSO2_UM_DB;"
