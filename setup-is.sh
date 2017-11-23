@@ -6,7 +6,7 @@ set -o verbose
 readonly USERNAME=$2
 readonly DB_HOST=$4
 readonly DB_PORT=$6
-readonly DB_ENGINE=$8
+readonly DB_ENGINE=$(echo "$8" | awk '{print tolower($0)}')
 readonly IS_HOST_NAME=$10
 
 readonly PRODUCT_NAME="wso2is"
