@@ -53,10 +53,10 @@
             </jndiConfig>
             <definition type="RDBMS">
                 <configuration>
-                    <url>jdbc:mysql://#_RDS_HOSTNAME_#:3306/#_UM_DB_#</url>
+                    <url>jdbc:#_RDS_TYPE_#://#_RDS_HOSTNAME_#:#_RDS_PORT_#/#_UM_DB_#</url>
                     <username>#_UM_USER_#</username>
                     <password>#_UM_USER_#</password>
-                    <driverClassName>com.mysql.jdbc.Driver</driverClassName>
+                    <driverClassName>#_DRIVER_CLASS_#</driverClassName>
                     <maxActive>80</maxActive>
                     <maxWait>60000</maxWait>
                     <minIdle>5</minIdle>
@@ -76,10 +76,10 @@
             </jndiConfig>
             <definition type="RDBMS">
                 <configuration>
-                    <url>jdbc:mysql://#_RDS_HOSTNAME_#:3306/#_GOV_REG_DB_#</url>
+                    <url>jdbc:#_RDS_TYPE_#://#_RDS_HOSTNAME_#:#_RDS_PORT_#/#_GOV_REG_DB_#</url>
                     <username>#_GOV_REG_USER_#</username>
                     <password>#_GOV_REG_USER_#</password>
-                    <driverClassName>com.mysql.jdbc.Driver</driverClassName>
+                    <driverClassName>#_DRIVER_CLASS_#</driverClassName>
                     <maxActive>80</maxActive>
                     <maxWait>60000</maxWait>
                     <minIdle>5</minIdle>
@@ -99,10 +99,10 @@
             </jndiConfig>
             <definition type="RDBMS">
                 <configuration>
-                    <url>jdbc:mysql://#_RDS_HOSTNAME_#:3306/#_IDENTITY_DB_#</url>
+                    <url>jdbc:#_RDS_TYPE_#://#_RDS_HOSTNAME_#:#_RDS_PORT_#/#_IDENTITY_DB_#</url>
                     <username>#_IDENTITY_USER_#</username>
                     <password>#_IDENTITY_USER_#</password>
-                    <driverClassName>com.mysql.jdbc.Driver</driverClassName>
+                    <driverClassName>#_DRIVER_CLASS_#</driverClassName>
                     <maxActive>80</maxActive>
                     <maxWait>60000</maxWait>
                     <minIdle>5</minIdle>
