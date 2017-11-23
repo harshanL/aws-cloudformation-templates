@@ -8,7 +8,7 @@ readonly USERNAME=$2
 readonly WUM_USER=$4
 readonly WUM_PASS=$6
 readonly JDK=$8
-readonly DB_ENGINE=$(echo "$10" | awk '{print tolower($0)}')
+readonly DB_ENGINE=$(echo "$10" | awk '{print tolower($10)}')
 readonly LIB_DIR=/home/${USERNAME}/lib
 readonly TMP_DIR=/tmp
 
@@ -80,16 +80,6 @@ get_postgre_jdbc_driver() {
 }
 
 echo_params() {
-    echo param1=$1 >> /home/ubuntu/java.txt
-    echo param2=$2 >> /home/ubuntu/java.txt
-    echo param3=$3 >> /home/ubuntu/java.txt
-    echo param4=$4 >> /home/ubuntu/java.txt
-    echo param5=$5 >> /home/ubuntu/java.txt
-    echo param6=$6 >> /home/ubuntu/java.txt
-    echo param7=$7 >> /home/ubuntu/java.txt
-    echo param8=$8 >> /home/ubuntu/java.txt
-    echo param9=$9 >> /home/ubuntu/java.txt
-    echo param10=$10 >> /home/ubuntu/java.txt
     echo DB_ENGINE=${DB_ENGINE} >> /home/ubuntu/java.txt
 }
 
