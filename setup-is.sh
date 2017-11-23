@@ -18,13 +18,17 @@ readonly INSTALLATION_DIR=/opt/wso2
 readonly PRODUCT_HOME="${INSTALLATION_DIR}/${PRODUCT_NAME}-${PRODUCT_VERSION}"
 readonly DB_SCRIPT_HOME="${PRODUCT_HOME}/dbscripts"
 
-# MYSQL connection details
-readonly MYSQL_USERNAME="wso2"
-readonly MYSQL_PASSWORD="wso2"
+#Master DB connection details
+readonly MASTER_DB_USERNAME="wso2"
+readonly MASTER_DB_PASSWORD="password"
+
+#MySQL connection details
+readonly MYSQL_USERNAME=$MASTER_DB_USERNAME
+readonly MYSQL_PASSWORD=$MASTER_DB_PASSWORD
 
 #PostgreSQL connection details
-readonly POSTGRES_USERNAME="wso2"
-readonly POSTGRES_PASSWORD="wso2"
+readonly POSTGRES_USERNAME=$MASTER_DB_USERNAME
+readonly POSTGRES_PASSWORD=$MASTER_DB_PASSWORD
 
 # databases
 readonly UM_DB="wso2db"
@@ -34,11 +38,11 @@ readonly BPS_DB="wso2db"
 readonly METRICS_DB="wso2db"
 
 # database users
-readonly UM_USER="wso2"
-readonly IDENTITY_USER="wso2"
-readonly GOV_REG_USER="wso2"
-readonly BPS_USER="wso2"
-readonly METRICS_DB_USER="wso2"
+readonly UM_USER=$MASTER_DB_USERNAME
+readonly IDENTITY_USER=$MASTER_DB_USERNAME
+readonly GOV_REG_USER=$MASTER_DB_USERNAME
+readonly BPS_USER=$MASTER_DB_USERNAME
+readonly METRICS_DB_USER=$MASTER_DB_USERNAME
 
 setup_wum_updated_pack() {
 
@@ -61,9 +65,9 @@ setup_mysql_databases() {
 
     echo ">> Creating users..."
     mysql -h $DB_HOST -P $DB_PORT -u $MYSQL_USERNAME -p$MYSQL_PASSWORD -e "CREATE USER '$UM_USER'@'%' IDENTIFIED BY
-    '$UM_USER'; CREATE USER '$IDENTITY_USER'@'%' IDENTIFIED BY '$IDENTITY_USER'; CREATE USER '$GOV_REG_USER'@'%'
-    IDENTIFIED BY '$GOV_REG_USER'; CREATE USER '$BPS_USER'@'%' IDENTIFIED BY '$BPS_USER'; 
-    CREATE USER '$METRICS_DB_USER'@'%' IDENTIFIED BY '$METRICS_DB_USER';"
+    '$MYSQL_PASSWORD'; CREATE USER '$IDENTITY_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD'; CREATE USER '$GOV_REG_USER'@'%'
+    IDENTIFIED BY '$MYSQL_PASSWORD'; CREATE USER '$BPS_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD'; 
+    CREATE USER '$METRICS_DB_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
     echo ">> Users created!"
 
     echo -e ">> Grant access for users..."
@@ -93,11 +97,11 @@ setup_postgres_databases() {
     export PGPASSWORD=$POSTGRES_PASSWORD
 
     echo ">> Creating users..."
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $UM_USER WITH LOGIN PASSWORD '$UM_USER'"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $IDENTITY_USER WITH LOGIN PASSWORD '$IDENTITY_USER'"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $GOV_REG_USER WITH LOGIN PASSWORD '$GOV_REG_USER'"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $BPS_USER WITH LOGIN PASSWORD '$BPS_USER'"
-    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $METRICS_DB_USER WITH LOGIN PASSWORD '$METRICS_DB_USER'"
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $UM_USER WITH LOGIN PASSWORD '$POSTGRES_PASSWORD'"
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $IDENTITY_USER WITH LOGIN PASSWORD '$POSTGRES_PASSWORD'"
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $GOV_REG_USER WITH LOGIN PASSWORD '$POSTGRES_PASSWORD'"
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $BPS_USER WITH LOGIN PASSWORD '$POSTGRES_PASSWORD'"
+    psql -h $DB_HOST -p $DB_PORT --username $POSTGRES_USERNAME -c "CREATE USER $METRICS_DB_USER WITH LOGIN PASSWORD '$POSTGRES_PASSWORD'"
     echo ">> Users created!"
 
     echo -e ">> Grant access for users..."
