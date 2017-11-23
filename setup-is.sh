@@ -135,7 +135,7 @@ copy_libs() {
 copy_config_files() {
 
     echo ">> Copying configuration files "
-    cp -r -v conf/* ${PRODUCT_HOME}/repository/conf/
+    cp -r -v product-configs/* ${PRODUCT_HOME}/repository/conf/
     echo ">> Done!"
 }
 

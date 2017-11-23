@@ -15,4 +15,3 @@ This repository contains an AWS CloudFormation template for WSO2 Identity Server
 6. Browse and select the _wso2-is-with-alb-cf-template.yml_ and proceed with the deployment.
 7. Follow the on screen instructions and provide the ARN of the certificate uploaded in step 3, SSH key, WUM username, password and proceed.  
  
- 
